@@ -1,0 +1,14 @@
+[Unit]
+Description=Prometheus Server
+Documentation=https://prometheus.io/docs/introduction/overview/
+After=network-online.target
+
+[Service]
+User=prometheus
+Restart=on-failure
+ExecStart={{ rundir }}/prometheus/prometheus \
+                                --config.file={{ config_dir }}/prometheus.yml \
+                                --storage.tsdb.path={{ data_dir }}/data
+
+[Install]
+WantedBy=multi-user.target
