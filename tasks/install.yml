@@ -1,0 +1,14 @@
+--- 
+# install tasks for prometheus
+- name: Ensure the staging directory is present for tarballs.
+  file:
+    path: "{{ tarball_staging_dir }}"
+    state: directory
+    mode: 0755
+
+- name: Download the component tarball
+  get_url: 
+    url: "{{ item.url }}/v{{ item.version }}/{{ item.name }}-{{ item.version }}.linux-amd64.tar.gz"
+    dest: "{{ tarball_staging_dir }}/{{ item.name }}-{{ item.version }}.linux-amd64.tar.gz"
+  with_items: "{{ components }}"
+  
