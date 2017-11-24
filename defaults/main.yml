@@ -1,7 +1,11 @@
 ---
+# defaults file for prometheus-role
 tarball_staging_dir: /tmp/
 rundir: /deploy/prometheus/
-# defaults file for prometheus-role
+config_dir: /etc/prometheus
+data_dir: /var/lib/prometheus/data
+# User that prometheus runs as 
+prom_user: drillbot
 components:
   - name: prometheus
     version: 2.0.0

@@ -1,10 +1,18 @@
 ---
 # install tasks for prometheus
+- name: ensure user present
+  user: 
+    name: "{{ prom_user }}"
+    state: present
+  
+
+
 - name: Ensure the run dirs are present
   file:
     path: "{{ rundir }}/{{ item['name'] }}"
     state: directory
     mode: 0755
+    owner: "{{ prom_user }}"
   with_items: "{{ components }}"
 
 - name: Ensure the staging dirs are present
@@ -29,12 +37,9 @@
     src: "{{ tarball_staging_dir }}/{{ item.0['name'] }}-{{ item.0['version'] }}.linux-amd64.tar.gz"
     dest: "{{ rundir }}/{{ item.0['name']}}"
     remote_src: yes
+    extra_opts: '--strip-components=1'
+    owner: "{{ prom_user }}"
     creates: "{{ item.1 }}"
   with_subelements:
     - "{{ components }}"
     - binaries
-
-- name: Template Prometheus config file
-  template:
-    src: prometheus.yml.j2
-    dest: "{{ rundir }}/prometheus.yml"

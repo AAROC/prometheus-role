@@ -1,3 +1,4 @@
 ---
 # tasks file for prometheus-role
 - include: install.yml
+- include: config.yml
