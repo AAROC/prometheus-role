@@ -1,3 +1,4 @@
 # ignore all compiled python file
 *.pyc
 molecule/default/.molecule/
+.vscode
