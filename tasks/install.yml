@@ -1,13 +1,40 @@
 ---
 # install tasks for prometheus
-- name: Ensure the staging directory is present for tarballs.
+- name: Ensure the run dirs are present
+  file:
+    path: "{{ rundir }}/{{ item['name'] }}"
+    state: directory
+    mode: 0755
+  with_items: "{{ components }}"
+
+- name: Ensure the staging dirs are present
   file:
     path: "{{ tarball_staging_dir }}"
     state: directory
     mode: 0755
 
-- name: Download the component tarball
+# Ugh. unarchive doesn't get remote_src,
+# thanks, Obama. 
+# See https://github.com/ansible/ansible/issues/18897
+
+- name: Get the src
   get_url:
-    url: "{{ item.url }}/v{{ item.version }}/{{ item.name }}-{{ item.version }}.linux-amd64.tar.gz"
-    dest: "{{ tarball_staging_dir }}/{{ item.name }}-{{ item.version }}.linux-amd64.tar.gz"
+    url: "{{ item['url'] }}/v{{ item['version'] }}/{{ item['name'] }}-{{ item['version'] }}.linux-amd64.tar.gz"
+    dest: "{{ tarball_staging_dir }}"
   with_items: "{{ components }}"
+
+
+- name: Unpack
+  unarchive:
+    src: "{{ tarball_staging_dir }}/{{ item.0['name'] }}-{{ item.0['version'] }}.linux-amd64.tar.gz"
+    dest: "{{ rundir }}/{{ item.0['name']}}"
+    remote_src: yes
+    creates: "{{ item.1 }}" 
+  with_subelements: 
+    - "{{ components }}"
+    - binaries
+  
+- name: Template Prometheus config file
+  template:
+    src: prometheus.yml.j2
+    dest: "{{ rundir }}/prometheus.yml"

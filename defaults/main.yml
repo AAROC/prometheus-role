@@ -1,7 +1,17 @@
 ---
 tarball_staging_dir: /tmp/
+rundir: /deploy/prometheus/
 # defaults file for prometheus-role
 components:
   - name: prometheus
     version: 2.0.0
     url: https://github.com/prometheus/prometheus/releases/download/
+    binaries:
+      - prometheus
+      - promtool
+  - name: alertmanager
+    version: 0.11.0
+    url: https://github.com/prometheus/alertmanager/releases/download/
+    binaries:
+      - alertmanager
+      - amtool
