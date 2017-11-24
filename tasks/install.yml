@@ -14,7 +14,7 @@
     mode: 0755
 
 # Ugh. unarchive doesn't get remote_src,
-# thanks, Obama. 
+# thanks, Obama.
 # See https://github.com/ansible/ansible/issues/18897
 
 - name: Get the src
@@ -29,11 +29,11 @@
     src: "{{ tarball_staging_dir }}/{{ item.0['name'] }}-{{ item.0['version'] }}.linux-amd64.tar.gz"
     dest: "{{ rundir }}/{{ item.0['name']}}"
     remote_src: yes
-    creates: "{{ item.1 }}" 
-  with_subelements: 
+    creates: "{{ item.1 }}"
+  with_subelements:
     - "{{ components }}"
     - binaries
-  
+
 - name: Template Prometheus config file
   template:
     src: prometheus.yml.j2
