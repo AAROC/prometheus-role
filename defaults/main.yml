@@ -4,7 +4,7 @@ tarball_staging_dir: /tmp/
 rundir: /deploy/prometheus/
 config_dir: /etc/prometheus
 data_dir: /var/lib/prometheus/data
-# User that prometheus runs as 
+# User that prometheus runs as
 prom_user: drillbot
 components:
   - name: prometheus

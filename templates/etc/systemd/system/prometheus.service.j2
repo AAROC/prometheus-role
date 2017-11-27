@@ -4,11 +4,11 @@ Documentation=https://prometheus.io/docs/introduction/overview/
 After=network-online.target
 
 [Service]
-User=prometheus
+User={{ prom_user }}
 Restart=on-failure
 ExecStart={{ rundir }}/prometheus/prometheus \
                                 --config.file={{ config_dir }}/prometheus.yml \
-                                --storage.tsdb.path={{ data_dir }}/data
+                                --storage.tsdb.path={{ data_dir }}
 
 [Install]
 WantedBy=multi-user.target
