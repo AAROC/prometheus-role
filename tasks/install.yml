@@ -1,11 +1,9 @@
 ---
 # install tasks for prometheus
 - name: ensure user present
-  user: 
+  user:
     name: "{{ prom_user }}"
     state: present
-  
-
 
 - name: Ensure the run dirs are present
   file:

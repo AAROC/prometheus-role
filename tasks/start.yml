@@ -1,0 +1,38 @@
+---
+#  Start commands for when prometheus is running in a VM
+- name: Ensure that systemd dir is present
+  file:
+    path: /etc/systemd/system
+    state: directory
+
+- name: Template the systemd script
+  template:
+    src: etc/systemd/system/prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+  notify: Restart prometheus
+
+- name: Ensure that service is enabled
+  service:
+    name: prometheus
+    state: enabled
+
+- name: Ensure that service is running
+  service:
+    name: prometheus
+    state: started
+
+- name: tell the team
+  slack:
+    token: "{{ slack_token }}"
+    color: good
+    channel: devops-foundry
+    username: "Ansible on {{ inventory_hostname}}"
+    msg: We good
+    attachments:
+      - title: "A message from Big Brother"
+        text: "Prometheus is up."
+        color: good
+        short: True
+  tags:
+    - slack
+  when: slack_token is defined
